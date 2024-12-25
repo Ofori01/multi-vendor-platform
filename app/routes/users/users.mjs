@@ -1,12 +1,13 @@
 import { Router } from "express";
 import communicator from "../../../communicator/index.mjs";
+import authorization from "../auth/controllers/authController.mjs";
 
 
 
 const userRouter = Router();
 
 
-userRouter.get('/users', async (req,res)=> {
+userRouter.get('/users',authorization(['admin']), async (req,res)=> {
     try {
         const users = await communicator.getUsers();
         res.status(200).send(users);

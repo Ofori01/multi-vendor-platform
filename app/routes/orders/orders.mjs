@@ -1,10 +1,11 @@
 import { Router } from "express";
 import communicator from "../../../communicator/index.mjs";
+import authorization from "../auth/controllers/authController.mjs";
 
 
 const orderRouter = Router();
 
-orderRouter.post('/order/create', async (req, res) => {
+orderRouter.post('/order/create',authorization(['user']), async (req, res) => {
     try {
         const {user_id, product_id, quantity, total_price, shipping_address} = req.body;
         if(!user_id || !product_id || !quantity || !total_price || !shipping_address) {
@@ -23,7 +24,7 @@ orderRouter.post('/order/create', async (req, res) => {
 
 })
 
-orderRouter.put('/order/update', async (req, res) => {
+orderRouter.put('/order/update',async (req, res) => {
     try {
         const {order_id, order} = req.body;
         if(!order_id || !order) {
@@ -38,7 +39,7 @@ orderRouter.put('/order/update', async (req, res) => {
 
 })
 
-orderRouter.patch('/order/cancel', async (req, res) => {
+orderRouter.patch('/order/cancel' ,async (req, res) => {
     try {
         const {order_id} = req.body;
         if(!order_id) {
@@ -56,7 +57,7 @@ orderRouter.patch('/order/cancel', async (req, res) => {
 
 })
 
-orderRouter.post('/order/getOrders', async (req, res) => {
+orderRouter.post('/order/getOrders',authorization(['admin']) ,async (req, res) => {
     try {
         const {user_id} = req.body;
         if(!user_id) {
