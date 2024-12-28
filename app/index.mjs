@@ -5,6 +5,8 @@ import authRouter from './routes/auth/auth.mjs'
 import userRouter from './routes/users/users.mjs'
 import productRouter from './routes/products/products.mjs'
 import orderRouter from './routes/orders/orders.mjs'
+import cors from 'cors'
+
 
 dotenv.config()
 const app = express()
@@ -14,6 +16,7 @@ app.listen(process.env.MAIN_PORT, () => {
 
 
 app.use(express.json())
+app.use(cors())
 app.use('/api',authRouter)
 app.use('/api',userRouter)
 app.use('/api',productRouter)
