@@ -1,6 +1,6 @@
 
 
-async function authorization(roles){
+function authorization(roles){
     return async (req,res,next)=>{
         try {
             console.log('Authorization middleware');
