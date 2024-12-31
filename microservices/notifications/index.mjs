@@ -45,9 +45,9 @@ app.post('/api/sendNotification', async (req, res) => {
             return res.status(404).send({msg: 'User not found'});
         }
         const response = createMail(user.email, subject, message);
-        console.log(response);
+        return res.status(200).send({msg: 'Email sent'});
     } catch (error) {
-        res.status(500).send({msg: `Error: ${error.message}`})
+        res.status(500).send({msg: `${error.message}`})
         
     }
 })

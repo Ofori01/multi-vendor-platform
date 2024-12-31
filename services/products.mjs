@@ -1,8 +1,8 @@
 import ProductModel from "../models/products/productsSchema.mjs";
 
-async function addProduct(seller_id, title, description, price, stock_quantity, category){
+async function addProduct(seller_id, title, description, price, stock_quantity, category,imageId){
     try {
-        const newProduct = new ProductModel({seller_id, title, description, price, stock_quantity, category});
+        const newProduct = new ProductModel({seller_id, title, description, price, stock_quantity, category, image_url: imageId});
         return await newProduct.save();
     } catch (error) {
         throw error;

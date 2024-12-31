@@ -15,7 +15,8 @@ async function createUser(password, email, name, role) {
         await newUser.save();
         return newUser;
     } catch (error) {
-        throw error
+        throw new Error("User not created. Email already Exist or invalid fields");
+        
     }
 }
 

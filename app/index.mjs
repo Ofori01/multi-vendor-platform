@@ -1,6 +1,5 @@
 import express from 'express'
 import dotenv from 'dotenv'
-import mongoose from 'mongoose'
 import authRouter from './routes/auth/auth.mjs'
 import userRouter from './routes/users/users.mjs'
 import productRouter from './routes/products/products.mjs'

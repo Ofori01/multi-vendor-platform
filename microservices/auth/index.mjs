@@ -40,7 +40,7 @@ app.post('/api/signin', async (req, res) => {
         res.status(200).send({token})
 
     } catch (error) {
-        res.status(500).send({msg: `Internal Server Error: ${error.message}`})
+        res.status(500).send({msg: `${error.message}`})
         
     }
 
@@ -53,7 +53,7 @@ app.post('/api/signup', async (req, res)=>{
         const newUser = await createUser(password, email, name, role);
         res.status(200).send(newUser);
     } catch (error) {
-        res.status(500).send({msg: `Internal Server Error: ${error.message}`})
+        res.status(500).send({msg: `${error.message}`})
     }
 
 })
@@ -65,7 +65,7 @@ app.post('/api/refreshToken', async (req,res)=> {
         const newToken = refreshToken(token);
         res.status(200).send({token: newToken})
     } catch (error) {
-        res.status(500).send({msg: `Internal Server Error: ${error.message}`})
+        res.status(500).send({msg: `${error.message}`})
     }
 })
 
@@ -84,7 +84,7 @@ app.get('/api/getUsers', async (req,res)=> {
         const users = await getUsers()
         res.status(200).send(users)
     } catch (error) {
-        res.status(500).send({msg: `Internal Server Error : ${error.message}`})
+        res.status(500).send({msg: `${error.message}`})
     }
  })
 
@@ -97,7 +97,7 @@ app.get('/api/getUsers', async (req,res)=> {
         res.status(200).send(user)
         
     } catch (error) {
-        res.status(500).send({msg: `Internal Server Error : ${error.message}`})
+        res.status(500).send({msg: `${error.message}`})
         
     }
  })

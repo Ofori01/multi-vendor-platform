@@ -1,8 +1,10 @@
 import dotenv from 'dotenv';
 import express from 'express';
 import mongoose from 'mongoose';
+import { GridFSBucket } from 'mongodb';
 import { addProduct, deleteProduct, getProduct, getProducts, updateProduct } from '../../services/products.mjs';
-
+import multer from 'multer';
+import uploadToGridFS from '../../utils/imageUploader.mjs';
 dotenv.config();
 
 const app = express();
@@ -13,20 +15,30 @@ app.use(express.json());
 app.listen(PORT, () => {
     console.log(`Product Service is running `);
 });
-mongoose.connect(process.env.MONGO_URI_PRODUCTS).then(
-    () => {
-        console.log("products service Connected to Database")
-    }
-).catch(
-    (error) => {
-        console.log("Error connecting product service to MongoDB",error)
-    }
-);
+mongoose.connect(process.env.MONGO_URI_PRODUCTS)
+const db_connection = mongoose.connection;
 
-app.post('/api/addProduct', async (req, res) => {
-    const {seller_id, title, description, price, stock_quantity, category} = req.body;
+//Initialize Grid Bucket
+let bucket;
+
+db_connection.on('error', (error) => {
+    console.error('Database connection error:', error);
+  });
+
+db_connection.once('open',  () => {
+    console.log('Database connected');
+    bucket = new GridFSBucket(db_connection.db, { bucketName: 'uploads' });
+});
+
+export {bucket}
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
+
+app.post('/api/addProduct',upload.fields([{name:"image", maxCount:1}]) ,async (req, res) => {
+    const {seller_id, title, description, price, stock_quantity, category,image} = req.body;
     try {
-        const newProduct = await addProduct(seller_id, title, description, price, stock_quantity, category);
+        const imageId = await uploadToGridFS(image)
+        const newProduct = await addProduct(seller_id, title, description, price, stock_quantity, category,imageId);
         res.status(200).send(newProduct);
     } catch (error) {
         res.status(500).send({msg: `Error: ${error.message}`})

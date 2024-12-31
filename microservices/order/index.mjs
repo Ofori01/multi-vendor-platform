@@ -31,7 +31,7 @@ app.post('/api/placeOrder', async (req, res) => {
         const newOrder = await placeOrder(order);
         res.status(201).send(newOrder);
     } catch (error) {
-        res.status(500).send({msg: `Error: ${error.message}`});
+        res.status(500).send({msg: `${error.message}`});
         
     }
 })
@@ -42,7 +42,7 @@ app.put('/api/updateOrder', async (req, res) => {
         const updatedOrder = await updateOrder(order_id,order);
         res.status(200).send(updatedOrder);
     } catch (error) {
-        res.status(500).send({msg: `Error: ${error.message}`});
+        res.status(500).send({msg: `${error.message}`});
     }
 
 })
@@ -53,7 +53,7 @@ app.patch('/api/cancelOrder', async (req, res) => {
         const cancelledOrder = await updateOrder(order_id, {order_status: "Cancelled"});
         res.status(200).send(cancelledOrder);
     } catch (error) {
-        res.status(500).send({msg: `Error: ${error.message}`});
+        res.status(500).send({msg: `${error.message}`});
     }
 
 })
@@ -64,7 +64,7 @@ app.post('/api/getOrders', async (req, res) => {
         const orders = await getOrders(user_id);
         res.status(200).send(orders);
     } catch (error) {
-        res.status(500).send({msg: `Error: ${error.message}`});
+        res.status(500).send({msg: `${error.message}`});
     }
 
 })
@@ -75,7 +75,7 @@ app.get('/api/getOrder/:id', async (req, res) => {
         const order = await getOrder(order_id);
         res.status(200).send(order);
     } catch (error) {
-        res.status(500).send({msg: `Error: ${error.message}`});
+        res.status(500).send({msg: `${error.message}`});
     }
 
 })

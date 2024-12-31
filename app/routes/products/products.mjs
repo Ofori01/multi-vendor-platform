@@ -1,24 +1,15 @@
 import { Router } from "express";
 import communicator from "../../../communicator/index.mjs";
 import authorization from "../auth/controllers/authController.mjs";
-
+import multer from "multer";
+import addProductController from "./controller/addProduct.mjs";
 const productRouter = Router();
 
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
-productRouter.post('/product/add',authorization(['seller']) ,async (req,res)=>{
-    const {seller_id, title, description, price, stock_quantity, category} = req.body;
-    if(!seller_id || !title || !description || !price || !stock_quantity || !category){
-        return res.status(400).send({msg: "Please provide all the details"});
-    }
-    try {
-        const newProduct = await communicator.addProduct(seller_id, title, description, price, stock_quantity, category);
-        res.status(200).send(newProduct);
-    } catch (error) {
-        res.status(500).send({msg: `Error: ${error.message}`})
-        
-    }
 
-})
+productRouter.post('/product/add',authorization(['seller']) ,upload.single("image") ,addProductController)
 
 productRouter.put('/product/update',authorization(['seller']) ,async (req,res)=>{
     const {product_id, product} = req.body;
@@ -48,7 +39,7 @@ productRouter.delete('/product/delete',authorization(['seller', 'admin']) ,async
     }
 })
 
-productRouter.get('/product/getAll',authorization(['admin']) ,async (req,res)=>{
+productRouter.get('/product/getAll',async (req,res)=>{
     try {
         const products = await communicator.getProducts();
         res.status(200).send(products);
