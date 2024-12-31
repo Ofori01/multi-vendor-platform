@@ -38,6 +38,7 @@ async function getProducts(){
 
 async function getProduct(product_id){
     try {
+        
         return await ProductModel.findOne({product_id});
     }
     catch (error) {

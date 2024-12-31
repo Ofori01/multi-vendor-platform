@@ -173,7 +173,7 @@ class Communicator {
             } 
           }
         );
-        return response.data.msg;
+        return response.data;
     }
 
     async getProductsByCategory(category) {
