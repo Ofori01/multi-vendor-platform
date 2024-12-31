@@ -176,6 +176,20 @@ class Communicator {
         return response.data.msg;
     }
 
+    async getProductsByCategory(category) {
+      const response = await this.productServiceClient.get(`/getProductsByCategory/${category}`).catch(
+        function (error) {
+          if (error.response) {
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
+            throw new Error(`error: ${error.response.data.msg}`);
+           
+          } 
+        }
+      );
+      return response.data;
+    }
+
   //order service communication
   async  placeOrder(order) {
     const response = await this.orderServiceClient.post('/placeOrder', {order}).catch(

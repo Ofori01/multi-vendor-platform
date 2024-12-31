@@ -45,4 +45,13 @@ async function getProduct(product_id){
     }
 }
 
-export {addProduct,updateProduct,deleteProduct,getProducts,getProduct};
+async function getProductByCategory(category){
+    try {
+        console.log(category)
+        return await ProductModel.find({category});
+    } catch (error) {
+        throw error;
+    }
+}
+
+export {addProduct,updateProduct,deleteProduct,getProducts,getProduct,getProductByCategory};

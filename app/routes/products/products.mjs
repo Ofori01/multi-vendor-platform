@@ -40,7 +40,17 @@ productRouter.delete('/product/delete',authorization(['seller', 'admin']) ,async
 })
 
 productRouter.get('/product/getAll',async (req,res)=>{
-    try {
+    const {category} = req.query;
+    console.log(category)
+    if(category){
+        try {
+            const products = await communicator.getProductsByCategory(category);
+            return res.status(200).send(products);
+        } catch (error) {
+            return res.status(500).send({msg: `Error: ${error.message}`})
+        }
+    }
+    else try {
         const products = await communicator.getProducts();
         res.status(200).send(products);
     } catch (error) {

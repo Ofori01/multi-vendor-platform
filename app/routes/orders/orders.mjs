@@ -7,18 +7,18 @@ const orderRouter = Router();
 
 orderRouter.post('/order/create',authorization(['user']), async (req, res) => {
     try {
-        const {user_id, product_id, quantity, total_price, shipping_address} = req.body;
-        if(!user_id || !product_id || !quantity || !total_price || !shipping_address) {
+        const {order} = req.body;
+        if(!order) {
             return res.status(400).send({msg: 'Missing required fields'});
         }
-        const createdOrder  = await communicator.placeOrder({user_id, product_id, quantity, total_price, shipping_address});
+        const createdOrder  = await communicator.placeOrder(order);
         if(createdOrder){
             const message = communicator.sendNotification(user_id,"Order Successfully Created",    `Your order :${createdOrder.order_id} was successfully created at ${createdOrder.updatedAt}`)
         }
         res.status(201).send({msg: 'Order created successfully'});
 
     } catch (error) {
-        res.status(500).send({msg: `Error: ${error.message}`});
+        res.status(500).send({msg: `${error.message}`});
         
     }
 
@@ -33,7 +33,7 @@ orderRouter.put('/order/update',async (req, res) => {
         const updatedOrder = await communicator.updateOrder(order_id, order);
         res.status(200).send(updatedOrder);
     } catch (error) {
-        res.status(500).send({msg: `Error: ${error.message}`});
+        res.status(500).send({msg: `${error.message}`});
         
     }
 
@@ -51,7 +51,7 @@ orderRouter.patch('/order/cancel' ,async (req, res) => {
         }
         res.status(200).send(cancelledOrder);
     } catch (error) {
-        res.status(500).send({msg: `Error: ${error.message}`});
+        res.status(500).send({msg: `${error.message}`});
         
     }
 
@@ -66,7 +66,7 @@ orderRouter.post('/order/getOrders',authorization(['admin']) ,async (req, res) =
         const orders = await communicator.getOrders(user_id);
         res.status(200).send(orders);
     } catch (error) {
-        res.status(500).send({msg: `Error: ${error.message}`});
+        res.status(500).send({msg: `${error.message}`});
         
     }
 
@@ -81,7 +81,7 @@ orderRouter.get('/order/getOrder/:id', async (req, res) => {
         const order = await communicator.getOrder(order_id);
         res.status(200).send(order);
     } catch (error) {
-        res.status(500).send({msg: `Error: ${error.message}`});
+        res.status(500).send({msg: `${error.message}`});
         
     }
 
