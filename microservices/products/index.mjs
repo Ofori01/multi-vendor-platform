@@ -41,7 +41,7 @@ app.post('/api/addProduct',upload.fields([{name:"image", maxCount:1}]) ,async (r
         const newProduct = await addProduct(seller_id, title, description, price, stock_quantity, category,imageId);
         res.status(200).send(newProduct);
     } catch (error) {
-        res.status(500).send({msg: `Error: ${error.message}`})
+        res.status(500).send({msg: `${error.message}`})
         
     }
     
@@ -54,7 +54,7 @@ app.put('/api/updateProduct', async (req,res)=>{
         const updatedProduct = await updateProduct(product_id, product);
         res.status(200).send(updatedProduct);
     } catch (error) {
-        res.status(500).send({msg: `Error: ${error.message}`})
+        res.status(500).send({msg: `${error.message}`})
         
     }
 })
@@ -65,7 +65,7 @@ app.delete('/api/deleteProduct', async (req,res)=>{
         const deletedProduct = await deleteProduct(product_id);
         res.status(200).send(deletedProduct);
     } catch (error) {
-        res.status(500).send({msg: `Error: ${error.message}`})
+        res.status(500).send({msg: `${error.message}`})
         
     }
 })
@@ -75,7 +75,7 @@ app.get('/api/getProducts', async (req,res)=>{
         const products = await getProducts();
         res.status(200).send(products);
     } catch (error) {
-        res.status(500).send({msg: `Error: ${error.message}`})
+        res.status(500).send({msg: `${error.message}`})
         
     }
 })
@@ -86,7 +86,7 @@ app.get('/api/getProduct/:id', async (req,res)=>{
         const product = await getProduct(id);
         res.status(200).send(product);
     } catch (error) {
-        res.status(500).send({msg: `Error: ${error.message}`})
+        res.status(500).send({msg: `${error.message}`})
         
     }
 })
