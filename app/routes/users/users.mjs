@@ -12,7 +12,7 @@ userRouter.get('/users',authorization(['admin']), async (req,res)=> {
         const users = await communicator.getUsers();
         res.status(200).send(users);
     } catch (error) {
-        res.status(500).send({msg: `Internal Server Error: ${error.message}`})
+        res.status(500).send({msg: `Error: ${error.message}`})
     }
 })
 
@@ -24,7 +24,7 @@ userRouter.get('/user/:id', async (req,res)=> {
         res.status(200).send(user);
     } catch (error) {
         console.log(error)
-        res.status(500).send({msg: `Internal Server Error: ${error.message}`})
+        res.status(500).send({msg: `Error: ${error.message}`})
     }
 })
 

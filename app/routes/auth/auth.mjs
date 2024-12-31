@@ -13,7 +13,7 @@ authRouter.post('/signin', async (req,res)=> {
         const token = await communicator.signIn(email, password);
         res.status(200).send(token);
     } catch (error) {
-        res.status(500).send({msg: `Server error: ${error}`});
+        res.status(500).send({msg: `Error: ${error}`});
         
     }
 })
@@ -31,7 +31,7 @@ authRouter.post('/signup', async (req,res)=> {
         return res.status(200).send({msg: "User created"});
         
     } catch (error) {
-        res.status(500).send({msg: `Server error: ${error.message}`});
+        res.status(500).send({msg: `Error: ${error.message}`});
     }
 })
 export default authRouter
