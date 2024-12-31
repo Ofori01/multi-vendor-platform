@@ -35,9 +35,11 @@ app.post('/api/signin', async (req, res) => {
     try {
         const user = await findUserByEmail(email);
         if(!user) res.status(404).send("User not found");
-        if(!comparePasswords(password, user.password)) res.status(401).send("Invalid password");
+        if(!comparePasswords(password, user.password)){ 
+            return res.status(401).send("Invalid password");
+        }
         const token = generateToken(user._id, user.name, user.role);
-        res.status(200).send({token})
+        res.status(200).send({token, user_id: user._id, name: user.name, role: user.role});
 
     } catch (error) {
         res.status(500).send({msg: `${error.message}`})
