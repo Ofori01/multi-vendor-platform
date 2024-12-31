@@ -7,11 +7,11 @@ const orderRouter = Router();
 
 orderRouter.post('/order/create',authorization(['user']), async (req, res) => {
     try {
-        const {order} = req.body;
-        if(!order) {
+        const {items,total_price,shipping_address} = req.body;
+        if(!items || !total_price || !shipping_address) {
             return res.status(400).send({msg: 'Missing required fields'});
         }
-        const createdOrder  = await communicator.placeOrder(order);
+        const createdOrder  = await communicator.placeOrder({items,total_price,shipping_address});
         if(createdOrder){
             const message = communicator.sendNotification(user_id,"Order Successfully Created",    `Your order :${createdOrder.order_id} was successfully created at ${createdOrder.updatedAt}`)
         }
