@@ -1,3 +1,5 @@
+import communicator from "../../../../communicator/index.mjs";
+
 async function addProductController(req,res,next){
     const {seller_id, title, description, price, stock_quantity, category} = req.body;
     if(!seller_id || !title || !description || !price || !stock_quantity || !category){

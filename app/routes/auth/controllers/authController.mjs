@@ -1,4 +1,4 @@
-
+import communicator from "../../../../communicator/index.mjs";
 
 function authorization(roles){
     return async (req,res,next)=>{

@@ -13,7 +13,7 @@ authRouter.post('/signin', async (req,res)=> {
         const token = await communicator.signIn(email, password);
         res.status(200).send(token);
     } catch (error) {
-        res.status(500).send({msg: `Error: ${error}`});
+        res.status(500).send({msg: `Error: ${error.message}`});
         
     }
 })
