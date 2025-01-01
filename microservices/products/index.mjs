@@ -34,7 +34,7 @@ export {bucket}
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-app.post('/api/addProduct',upload.fields([{name:"image", maxCount:1}]) ,async (req, res) => {
+app.post('/api/addProduct',async (req, res) => {
     const {seller_id, title, description, price, stock_quantity, category,image} = req.body;
     try {
         const imageId = await uploadToGridFS(image)

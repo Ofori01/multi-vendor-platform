@@ -9,6 +9,7 @@ function authorization(roles){
             if(!roles.includes(userDetails.role)){
                 return res.status(403).send({msg: "You are not authorized to access this resource"});
             }
+            req.user = userDetails;
             next();
         } catch (error) {
             res.status(500).send({msg: `Error: ${error.message}`})
