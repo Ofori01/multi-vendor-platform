@@ -6,10 +6,11 @@ function authorization(roles){
             console.log('Authorization middleware');
             const token = req.headers.authorization.split(' ')[1];
             const userDetails = await communicator.verifyToken(token);
-            if(!roles.includes(userDetails.role)){
+            console.log(userDetails);
+            if(!roles.includes(userDetails.decoded.role)){
                 return res.status(403).send({msg: "You are not authorized to access this resource"});
             }
-            req.user = userDetails;
+            req.user = userDetails.decoded;
             next();
         } catch (error) {
             res.status(500).send({msg: `Error: ${error.message}`})

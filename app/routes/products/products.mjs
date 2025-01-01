@@ -73,6 +73,21 @@ productRouter.get('/product/get/:id', async (req,res)=>{
     }
 })
 
+productRouter.get('/product/image/:id', async (req,res)=>{
+    const {id} = req.params;
+    if(!id){
+        res.status(400).send({msg: "Please provide image id"});
+    }
+    try {
+        const image = await communicator.getProductImage(id);
+        res.setHeader('Content-Type', 'image/jpeg')
+        res.status(200).send(image);
+    } catch (error) {
+        res.status(500).send({msg: `Error: ${error.message}`})
+        
+    }
+})
+
 export default productRouter
 
 

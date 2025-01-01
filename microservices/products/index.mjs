@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import express from 'express';
 import mongoose from 'mongoose';
-import { GridFSBucket } from 'mongodb';
+import { GridFSBucket, ObjectId } from 'mongodb';
 import { addProduct, deleteProduct, getProduct, getProductByCategory, getProducts, updateProduct } from '../../services/products.mjs';
 import multer from 'multer';
 import uploadToGridFS from '../../utils/imageUploader.mjs';
@@ -32,12 +32,12 @@ db_connection.once('open',  () => {
 
 export {bucket}
 const storage = multer.memoryStorage();
-const upload = multer({ storage });
 
 app.post('/api/addProduct',async (req, res) => {
     const {seller_id, title, description, price, stock_quantity, category,image} = req.body;
     try {
-        const imageId = await uploadToGridFS(image)
+        console.log(image)
+        const imageId = await uploadToGridFS(image) //upload Image to storage bucket
         const newProduct = await addProduct(seller_id, title, description, price, stock_quantity, category,imageId);
         res.status(200).send(newProduct);
     } catch (error) {
@@ -87,6 +87,33 @@ app.get('/api/getProduct/:id', async (req,res)=>{
         res.status(200).send(product);
     } catch (error) {
         res.status(500).send({msg: `${error.message}`})
+        
+    }
+})
+
+app.get('/api/getProductImage/:id', async (request,response)=>{
+    let {id} = request.params;
+
+    try {
+        id = new ObjectId(id);
+        // const image  = await bucket.find({_id: id}).toArray()
+
+
+
+        const downloadStream = bucket.openDownloadStream(id);
+
+        downloadStream.on('error', (error) => {
+            console.error('Error downloading file:', error);
+            return response.status(500).send('Error downloading file');
+        });
+
+        // response.setHeader('Content-Type', contentType);
+        // response.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+        downloadStream.pipe(response);
+    } catch (error) {
+        console.error('Error retrieving file:', error);
+        response.status(500).send('Error retrieving file');
+
         
     }
 })

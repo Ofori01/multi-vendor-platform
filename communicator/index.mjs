@@ -189,6 +189,20 @@ class Communicator {
       );
       return response.data;
     }
+    async getProductImage(id) {
+      const response = await this.productServiceClient.get(`/getProductImage/${id}`, {responseType: 'arraybuffer'}).catch(
+        function (error) {
+          if (error.response) {
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
+            throw new Error(`error: ${error.response.data.msg}`);
+           
+          } 
+        }
+      );
+      return response.data;
+    }
+
 
   //order service communication
   async  placeOrder(order) {

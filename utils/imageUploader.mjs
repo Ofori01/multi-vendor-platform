@@ -4,7 +4,7 @@ import { bucket } from '../microservices/products/index.mjs';
 const uploadToGridFS = (file) => {
     return new Promise((resolve, reject) => {
         const readableFileStream = new Readable();
-        readableFileStream.push(file.buffer);
+        readableFileStream.push(Buffer.from(file.buffer.data));
         readableFileStream.push(null);
 
         const uploadStream = bucket.openUploadStream(file.originalname, {
