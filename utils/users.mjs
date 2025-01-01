@@ -4,11 +4,14 @@ import usersModel from "../models/users/usersSchema.mjs";
 async function getUser(userID){
     try {
         let user =  await usersModel.findOne({user_id: userID})
-        if(!user) throw new Error("User not Found");
+        console.log(user)
+        if(!user){
+            throw new Error("User not Found");
+        } 
         return user
         
     } catch (error) {
-        throw Error
+        throw error
         
     }
 }

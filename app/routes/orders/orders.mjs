@@ -11,9 +11,11 @@ orderRouter.post('/order/create',authorization(['user']), async (req, res) => {
         if(!items || !total_price || !shipping_address) {
             return res.status(400).send({msg: 'Missing required fields'});
         }
-        const createdOrder  = await communicator.placeOrder({items,total_price,shipping_address});
+        const createdOrder  = await communicator.placeOrder({items,total_price,user_id: req.user.userID,shipping_address});
         if(createdOrder){
-            const message = communicator.sendNotification(user_id,"Order Successfully Created",    `Your order :${createdOrder.order_id} was successfully created at ${createdOrder.updatedAt}`)
+            // console.log(createdOrder.user_id)
+            // const message = await communicator.sendNotification(req.user.userID,"Order Successfully Created",`Your order :${createdOrder.order_id} was successfully created at ${createdOrder.updatedAt}`)
+            const message= await communicator.sendNotification(createdOrder.user_id, "Order Successfully Created",`Your order :${createdOrder.order_id} was successfully created at ${createdOrder.updated_at}`)
         }
         res.status(201).send({msg: 'Order created successfully'});
 
@@ -57,9 +59,9 @@ orderRouter.patch('/order/cancel' ,async (req, res) => {
 
 })
 
-orderRouter.post('/order/getOrders',authorization(['admin']) ,async (req, res) => {
+orderRouter.get('/order/getOrders',authorization(['user']) ,async (req, res) => {
     try {
-        const {user_id} = req.body;
+        const user_id = req.user.userID;
         if(!user_id) {
             return res.status(400).send({msg: 'Missing required fields'});
         }
@@ -74,11 +76,11 @@ orderRouter.post('/order/getOrders',authorization(['admin']) ,async (req, res) =
 
 orderRouter.get('/order/getOrder/:id', async (req, res) => {
     try {
-        const {order_id} = req.params;
-        if(!order_id) {
+        const {id} = req.params;
+        if(!id) {
             return res.status(400).send({msg: 'Missing required fields'});
         }
-        const order = await communicator.getOrder(order_id);
+        const order = await communicator.getOrder(id);
         res.status(200).send(order);
     } catch (error) {
         res.status(500).send({msg: `${error.message}`});

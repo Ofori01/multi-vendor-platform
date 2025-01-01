@@ -81,7 +81,7 @@ class Communicator {
         );
         return response.data;
     }
-    async  getUsers() {
+    async getUsers() {
         const response = await this.authServiceClient.get('/getUsers').catch(
           function (error) {
             if (error.response) {
@@ -94,7 +94,7 @@ class Communicator {
         );
         return response.data;
     }
-    async  getUser(user_id) {
+    async getUser(user_id) {
         const response = await this.authServiceClient.get(`/getUser/${user_id}`).catch(
           function (error) {
             if (error.response) {
@@ -103,7 +103,9 @@ class Communicator {
               throw new Error(`error: ${error.response.data.msg}`);
              
             } 
+            throw error;
           }
+          
         );
         return response.data;
     }
@@ -203,6 +205,32 @@ class Communicator {
       return response.data;
     }
 
+    async getAvailableCategories(){
+      const response = await this.productServiceClient.get('/getAvailableCategories').catch(
+        function (error){
+          if(error.response){
+            throw new Error(`${error.response.data.msg}`);
+            
+          }
+        }
+      )
+      return response.data
+    }
+
+    async getAllCategories(){
+      const response = await this.productServiceClient.get('/getAllCategories').catch(
+        function(error){
+          if(error.response){
+            throw new Error(`${error.response.data.msg}`);
+          }
+        }
+      )
+      return response.data
+    }
+
+
+
+
 
   //order service communication
   async  placeOrder(order) {
@@ -247,7 +275,7 @@ class Communicator {
     }
 
     async  getOrders(user_id) {
-        const response = await this.orderServiceClient.post('/getOrders', { user_id }).catch(
+        const response = await this.orderServiceClient.post('/getUserOrders', { user_id }).catch(
           function (error) {
             if (error.response) {
               // The request was made and the server responded with a status code
@@ -282,7 +310,8 @@ class Communicator {
               // that falls out of the range of 2xx
               throw new Error(`error: ${error.response.data.msg}`);
              
-            } 
+            }
+            // throw error;
           }
         );
         return response.data;

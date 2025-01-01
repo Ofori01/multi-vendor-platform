@@ -42,11 +42,12 @@ app.post('/api/sendNotification', async (req, res) => {
         }
         const user = await communicator.getUser(user_id);
         if(!user) {
-            return res.status(404).send({msg: 'User not found'});
+            return res.status(404).send({msg: 'User not found, Email not sent'});
         }
         const response = createMail(user.email, subject, message);
         return res.status(200).send({msg: 'Email sent'});
     } catch (error) {
+        console.log(error)
         res.status(500).send({msg: `${error.message}`})
         
     }

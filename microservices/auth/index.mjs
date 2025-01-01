@@ -38,8 +38,8 @@ app.post('/api/signin', async (req, res) => {
         if(!comparePasswords(password, user.password)){ 
             return res.status(401).send("Invalid password");
         }
-        const token = generateToken(user._id, user.name, user.role);
-        res.status(200).send({token, user_id: user._id, name: user.name, role: user.role});
+        const token = generateToken(user.user_id, user.name, user.role);
+        res.status(200).send({token, user_id: user.user_id, name: user.name, role: user.role});
 
     } catch (error) {
         res.status(500).send({msg: `${error.message}`})
@@ -95,7 +95,6 @@ app.get('/api/getUsers', async (req,res)=> {
     console.log(id)
     try {
         const user = await getUser(id)
-        console.log(user)
         res.status(200).send(user)
         
     } catch (error) {

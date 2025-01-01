@@ -20,7 +20,7 @@ productRouter.put('/product/update',authorization(['seller']) ,async (req,res)=>
         const updatedProduct = await communicator.updateProduct(product_id, product);
         res.status(200).send(updatedProduct);
     } catch (error) {
-        res.status(500).send({msg: `Error: ${error.message}`})
+        res.status(500).send({msg: `${error.message}`})
         
     }
 })
@@ -34,7 +34,7 @@ productRouter.delete('/product/delete',authorization(['seller', 'admin']) ,async
         const deletedProduct = await communicator.deleteProduct(product_id);
         res.status(200).send(deletedProduct);
     } catch (error) {
-        res.status(500).send({msg: `Error: ${error.message}`})
+        res.status(500).send({msg: `${error.message}`})
         
     }
 })
@@ -47,14 +47,14 @@ productRouter.get('/product/getAll',async (req,res)=>{
             const products = await communicator.getProductsByCategory(category);
             return res.status(200).send(products);
         } catch (error) {
-            return res.status(500).send({msg: `Error: ${error.message}`})
+            return res.status(500).send({msg: `${error.message}`})
         }
     }
     else try {
         const products = await communicator.getProducts();
         res.status(200).send(products);
     } catch (error) {
-        res.status(500).send({msg: `Error: ${error.message}`})
+        res.status(500).send({msg: `${error.message}`})
         
     }
 })
@@ -68,7 +68,7 @@ productRouter.get('/product/get/:id', async (req,res)=>{
         const product = await communicator.getProduct(id);
         res.status(200).send(product);
     } catch (error) {
-        res.status(500).send({msg: `Error: ${error.message}`})
+        res.status(500).send({msg: `${error.message}`})
         
     }
 })
@@ -83,7 +83,28 @@ productRouter.get('/product/image/:id', async (req,res)=>{
         res.setHeader('Content-Type', 'image/jpeg')
         res.status(200).send(image);
     } catch (error) {
-        res.status(500).send({msg: `Error: ${error.message}`})
+        res.status(500).send({msg: `${error.message}`})
+        
+    }
+})
+
+productRouter.get('/product/availableCategories', async (req,res)=>{
+    try {
+        console.log('Available categories route')
+        const categories=  await communicator.getAvailableCategories()
+        res.status(200).send(categories);
+    } catch (error) {
+        res.status(500).send({msg: `${error.message}`})
+        
+    }
+})
+
+productRouter.get('/product/allCategories', async (req,res)=>{
+    try {
+        const categories = await communicator.getAllCategories();
+        res.status(200).send(categories);
+    } catch (error) {
+        res.status(500).send({msg: `${error.message}`})
         
     }
 })

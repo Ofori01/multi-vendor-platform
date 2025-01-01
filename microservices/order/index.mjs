@@ -32,6 +32,7 @@ app.post('/api/placeOrder', async (req, res) => {
         res.status(201).send(newOrder);
     } catch (error) {
         res.status(500).send({msg: `${error.message}`});
+        console.log(error)
         
     }
 })
@@ -58,7 +59,7 @@ app.patch('/api/cancelOrder', async (req, res) => {
 
 })
 
-app.post('/api/getOrders', async (req, res) => {
+app.post('/api/getUserOrders', async (req, res) => {
     try {
         const {user_id}  = req.body;
         const orders = await getOrders(user_id);
