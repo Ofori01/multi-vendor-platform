@@ -164,6 +164,18 @@ class Communicator {
         );
         return response.data;
     }
+    
+
+    async  getProductsBySeller(seller_id) {
+      const response = await this.productServiceClient.get(`/getProductsBySeller/${seller_id}`).catch(
+        function (error){
+          if(error.response){
+            throw new Error(`${error.response.data.msg}`);
+          }
+        }
+      )
+      return response.data;
+    }
     async  getProduct(product_id) {
         const response = await this.productServiceClient.get(`/getProduct/${product_id}`).catch(
           function (error) {

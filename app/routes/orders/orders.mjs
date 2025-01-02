@@ -13,9 +13,21 @@ orderRouter.post('/order/create',authorization(['user']), async (req, res) => {
         }
         const createdOrder  = await communicator.placeOrder({items,total_price,user_id: req.user.userID,shipping_address});
         if(createdOrder){
-            // console.log(createdOrder.user_id)
-            // const message = await communicator.sendNotification(req.user.userID,"Order Successfully Created",`Your order :${createdOrder.order_id} was successfully created at ${createdOrder.updatedAt}`)
-            const message= await communicator.sendNotification(createdOrder.user_id, "Order Successfully Created",`Your order :${createdOrder.order_id} was successfully created at ${createdOrder.updated_at}`)
+            //get product names
+            let products = await Promise.all(
+                createdOrder.items.map(
+                        async ({product_id})=>{
+                            console.log(product_id)
+                            const product =  await communicator.getProduct(product_id)
+                            return product.title
+                        }
+                    )
+            ) 
+            //send notification to user
+    
+            const message= await communicator.sendNotification(createdOrder.user_id, "Order Successfully Created",`Hello ${req.user.name},\n\nYour order: \n${createdOrder.order_id} \n ${products.join('\n')} \n was successfully created at ${createdOrder.updatedAt}`)
+
+            //send notification to seller(s)
         }
         res.status(201).send({msg: 'Order created successfully'});
 
@@ -45,7 +57,7 @@ orderRouter.patch('/order/cancel' ,async (req, res) => {
     try {
         const {order_id} = req.body;
         if(!order_id) {
-            return res.status(400).send({msg: 'Missing required fields'});
+            return res.status(400).send({msg: 'Order ID is required'});
         }
         const cancelledOrder = await communicator.cancelOrder(order_id);
         if(cancelledOrder){
@@ -78,7 +90,7 @@ orderRouter.get('/order/getOrder/:id', async (req, res) => {
     try {
         const {id} = req.params;
         if(!id) {
-            return res.status(400).send({msg: 'Missing required fields'});
+            return res.status(400).send({msg: 'Order ID is required'});
         }
         const order = await communicator.getOrder(id);
         res.status(200).send(order);

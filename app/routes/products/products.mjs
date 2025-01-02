@@ -50,12 +50,24 @@ productRouter.get('/product/getAll',async (req,res)=>{
             return res.status(500).send({msg: `${error.message}`})
         }
     }
+
+    
     else try {
         const products = await communicator.getProducts();
         res.status(200).send(products);
     } catch (error) {
         res.status(500).send({msg: `${error.message}`})
         
+    }
+})
+
+productRouter.get('/product/seller',authorization(['seller']),async (req,res)=>{
+    try {
+        const seller_id = req.user.role
+        const products = await communicator.getProductsBySeller(seller_id);
+        res.status(200).send(products);
+    } catch (error) {
+        res.status(500).send({msg: `${error.message}`})
     }
 })
 

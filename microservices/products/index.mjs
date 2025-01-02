@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 import mongoose from 'mongoose';
 import { GridFSBucket, ObjectId } from 'mongodb';
-import { addProduct, deleteProduct, getAllCategories, getAvailableCategories, getProduct, getProductByCategory, getProducts, updateProduct } from '../../services/products.mjs';
+import { addProduct, deleteProduct, getAllCategories, getAvailableCategories, getProduct, getProductByCategory, getProducts, getProductsBySeller, updateProduct } from '../../services/products.mjs';
 import multer from 'multer';
 import uploadToGridFS from '../../utils/imageUploader.mjs';
 dotenv.config();
@@ -122,6 +122,17 @@ app.get('/api/getProductsByCategory/:category', async (req,res)=>{
     try {
         const {category} = req.params;
         const products = await getProductByCategory(category);
+        res.status(200).send(products);
+    } catch (error) {
+        res.status(500).send({msg: `${error.message}`})
+        
+    }
+})
+
+app.get('/api/getProductsBySeller/:seller_id', async (req,res)=>{
+    try {
+        const {seller_id} = req.params;
+        const products = await getProductsBySeller(seller_id);
         res.status(200).send(products);
     } catch (error) {
         res.status(500).send({msg: `${error.message}`})

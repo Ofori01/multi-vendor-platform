@@ -37,8 +37,7 @@ async function getProducts(){
 
 async function getProduct(product_id){
     try {
-        
-        return await ProductModel.findOne({product_id});
+       return await ProductModel.findOne({product_id});
     }
     catch (error) {
         throw error;
@@ -55,10 +54,8 @@ async function getProductByCategory(category){
 
 async function getAvailableCategories(){
     try {
-        let categories = ProductModel.find(_,{category:1})
-        console.log(categories)
+        let categories = await ProductModel.find({},{category:1})
         categories = [...new Set(categories.map((product)=> product.category))]
-        console.log(categories)
         return categories
 
     } catch (error) {
@@ -71,4 +68,12 @@ function getAllCategories(){
         return  ["Electronics", "Clothing", "Books", "Home & Kitchen", "Beauty & Health", "Sports & Outdoors", "Toys & Games", "Others"]
 }
 
-export {addProduct,updateProduct,deleteProduct,getProducts,getProduct,getProductByCategory, getAvailableCategories, getAllCategories};
+async function getProductsBySeller(seller_id){
+    try {
+        return await ProductModel.find({seller_id});
+    } catch (error) {
+        throw error;
+    }
+}
+
+export {addProduct,updateProduct,deleteProduct,getProducts,getProduct,getProductByCategory, getAvailableCategories, getAllCategories, getProductsBySeller};
