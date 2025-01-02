@@ -14,22 +14,27 @@ orderRouter.post('/order/create',authorization(['user']), async (req, res) => {
         const createdOrder  = await communicator.placeOrder({items,total_price,user_id: req.user.userID,shipping_address});
         if(createdOrder){
             //get product names
+            let sellers= []
             let products = await Promise.all(
                 createdOrder.items.map(
-                        async ({product_id})=>{
-                            console.log(product_id)
+                        async ({product_id,quantity, price})=>{
                             const product =  await communicator.getProduct(product_id)
+                            sellers.push({seller_id: product.seller_id, product_title: product.title, quantity,price})
                             return product.title
                         }
                     )
             ) 
             //send notification to user
     
-            const message= await communicator.sendNotification(createdOrder.user_id, "Order Successfully Created",`Hello ${req.user.name},\n\nYour order: \n${createdOrder.order_id} \n ${products.join('\n')} \n was successfully created at ${createdOrder.updatedAt}`)
+            const message= await communicator.sendNotification(createdOrder.user_id, "Order Successfully Created",`Hello ${req.user.name},\n\nYour order:\n${createdOrder.order_id}\n${products.join('\n')}\nTotal price ${createdOrder.total_price}\nwas successfully created at ${createdOrder.updatedAt}\n\nMulti-Vendor-Platform Team`)
 
             //send notification to seller(s)
+            await Promise.all(
+                sellers.forEach(async ({seller_id,product_title,quantity, price})=> await communicator.sendNotification(seller_id,"Order Placed", `Hello,\n\nAn order for your product ${product_title} with price ${price} has been placed.\nThe order was placed for ${quantity} units of ${product_title}\n\nYou will be notified when the payment for the order is confirmed.\n\n Thank you,\nMulti-vendor-platform-team  `))
+            ) 
+
         }
-        res.status(201).send({msg: 'Order created successfully'});
+        res.status(201).send(createdOrder);
 
     } catch (error) {
         res.status(500).send({msg: `${error.message}`});

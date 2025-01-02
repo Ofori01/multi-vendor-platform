@@ -3,7 +3,8 @@ import communicator from "../../../../communicator/index.mjs";
 function authorization(roles){
     return async (req,res,next)=>{
         try {
-            const token = req.headers.authorization.split(' ')[1];
+            const token = req.headers.authorization?.split(' ')[1];
+            if (!token) return res.status(400).send({msg: "Token is required"});
             const userDetails = await communicator.verifyToken(token);
             console.log(userDetails)
             if(!roles.includes(userDetails.decoded.role)){

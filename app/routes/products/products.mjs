@@ -63,7 +63,7 @@ productRouter.get('/product/getAll',async (req,res)=>{
 
 productRouter.get('/product/seller',authorization(['seller']),async (req,res)=>{
     try {
-        const seller_id = req.user.role
+        const seller_id = req.user.userID
         const products = await communicator.getProductsBySeller(seller_id);
         res.status(200).send(products);
     } catch (error) {
