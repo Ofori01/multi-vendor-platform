@@ -6,7 +6,7 @@ import addProductController from "./controller/addProduct.mjs";
 const productRouter = Router();
 
 const storage = multer.memoryStorage();
-const upload = multer({ storage });
+const upload = multer({ storage, limits: {fileSize: 5 *1024 *1024} });
 
 
 productRouter.post('/product/add',authorization(['seller']) ,upload.single("image") ,addProductController)

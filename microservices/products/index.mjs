@@ -9,7 +9,7 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PRODUCTS_PORT;
-app.use(express.json());
+app.use(express.json({limit: '50mb'}));
 
 
 app.listen(PORT, () => {
@@ -31,12 +31,10 @@ db_connection.once('open',  () => {
 });
 
 export {bucket}
-const storage = multer.memoryStorage();
 
 app.post('/api/addProduct',async (req, res) => {
     const {seller_id, title, description, price, stock_quantity, category,image} = req.body;
     try {
-        console.log(image)
         const imageId = await uploadToGridFS(image) //upload Image to storage bucket
         const newProduct = await addProduct(seller_id, title, description, price, stock_quantity, category,imageId);
         res.status(200).send(newProduct);

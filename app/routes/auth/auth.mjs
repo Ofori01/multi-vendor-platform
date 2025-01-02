@@ -7,7 +7,7 @@ const authRouter =  Router();
 authRouter.post('/signin', async (req,res)=> {
     const {email, password} = req.body;
     if(!email || !password){
-        res.status(400).send('Missing fields');
+        return res.status(400).send('Missing fields');
     }
     try {
         const response = await communicator.signIn(email, password);
