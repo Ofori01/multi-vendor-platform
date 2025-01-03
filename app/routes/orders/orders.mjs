@@ -43,9 +43,13 @@ orderRouter.post('/order/create',authorization(['user','seller']), async (req, r
 
 })
 
-orderRouter.put('/order/update',async (req, res) => {
+orderRouter.put('/order/update/:id',async (req, res) => {
     try {
-        const {order_id, order} = req.body;
+        const order_id = req.params.id;
+        let order ={};
+        Object.keys(req.body).forEach(key => {
+            if(key !== 'order_id') order[key] = req.body[key]
+        })
         if(!order_id || !order) {
             return res.status(400).send({msg: 'Missing required fields'});
         }

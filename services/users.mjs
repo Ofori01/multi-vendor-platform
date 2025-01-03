@@ -1,3 +1,4 @@
+import communicator from "../communicator/index.mjs";
 import usersModel from "../models/users/usersSchema.mjs";
 async function findUserByEmail(email) {
     try {

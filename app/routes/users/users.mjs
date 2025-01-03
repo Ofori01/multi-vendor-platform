@@ -49,9 +49,10 @@ userRouter.patch('/user/update',authorization(['admin','user','seller']), async 
 
 userRouter.delete('/user/delete',authorization(['admin','user','seller']), async (req,res)=> {
     try {
-        const user_id = req.user.role === "admin" ? req.body.user_id : req.user.userID;
+        const role = req.user.role
+        const user_id = role === "admin" ? req.body.user_id : req.user.userID;
         if(!user_id) res.status(400).send('Missing fields');
-        const deletedUser = await communicator.deleteUser(user_id);
+        const deletedUser = await communicator.deleteUser(user_id, role);
         res.status(200).send(deletedUser);
     } catch (error) {
         res.status(500).send({msg: `Error: ${error.message}`})

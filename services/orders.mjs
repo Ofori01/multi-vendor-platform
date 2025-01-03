@@ -65,5 +65,13 @@ async function getSellerOrders(seller_id){
     }
 }
 
+async function updateUserOrders(user_id,order){
+    try {
+       const updatedOrders =  await OrdersModel.updateMany({user_id}, order);
+       return updatedOrders;
+    } catch (error) {
+        throw error
+    }
+}
 
-export {placeOrder, updateOrder, getOrders, getOrder, getSellerOrders};
+export {placeOrder, updateOrder, getOrders, getOrder, getSellerOrders, updateUserOrders};

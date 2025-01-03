@@ -124,8 +124,8 @@ class Communicator {
         return response.data;
       }
 
-      async deleteUser(user_id) {
-        const response = await this.authServiceClient.delete('/deleteUser', {user_id}).catch(
+      async deleteUser(user_id, role) {
+        const response = await this.authServiceClient.delete('/deleteUser', {user_id, role}).catch(
           function (error) {
             if (error.response) {
               // The request was made and the server responded with a status code
@@ -308,6 +308,16 @@ class Communicator {
           }
         );
         return response.data;
+    }
+    async updateUserOrders(user_id, order) {
+      const response = await this.orderServiceClient.put('/updateUserOrders', {user_id, order}).catch(
+        function (error) {
+          if(error.response){
+            throw new Error(`${error.response.data.msg}`);
+          }
+        }
+      );
+      return response.data;
     }
 
     async  cancelOrder(order_id) {

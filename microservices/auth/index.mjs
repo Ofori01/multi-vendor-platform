@@ -4,6 +4,7 @@ import mongoose, { mongo } from 'mongoose';
 import { comparePasswords, generatePasswordHash, generateToken, refreshToken, verifyToken } from '../../utils/authentication.mjs';
 import { createUser, deleteUser, findUserByEmail, updateUser } from '../../services/users.mjs';
 import { getUser, getUsers } from '../../utils/users.mjs';
+import communicator from '../../communicator/index.mjs';
 
 dotenv.config();
 
@@ -118,10 +119,19 @@ app.get('/api/getUsers', async (req,res)=> {
  })
 
  app.delete('/api/deleteUser', async (req,res)=>{
-    const {user_id} = req.body;
+    const {user_id, role} = req.body;
     try {
-        const deletedUser = await deleteUser(user_id);
-        res.status(200).send(deletedUser);
+        if(role === 'user'){
+            const deletedUser = await deleteUser(user_id);
+            const message = await communicator.sendNotification(user_id, "Account Deleted",  `Hello, \n\nYour account was successfully deleted\n\nIf this wasn't you, please contact us immediately.\n\nBest regards,\nThe Multi-Vendor-Platform Team`);
+            await communicator.updateUserOrders(user_id, {order_status: "Cancelled"});
+            res.status(200).send(deletedUser);
+        }
+        else if(role === 'seller'){
+            const deleteUser = await deleteUser(user_id);
+            const message = await communicator.sendNotification(user_id, "Account Deleted",  `Hello, \n\nYour account was successfully deleted\n\nIf this wasn't you, please contact us immediately.\n\nBest regards,\nThe Multi-Vendor-Platform Team`);
+
+        }
     } catch (error) {
         res.status(500).send({msg: `${error.message}`})
     }

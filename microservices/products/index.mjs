@@ -68,6 +68,14 @@ app.delete('/api/deleteProduct', async (req,res)=>{
     }
 })
 
+app.delete('/api/deleteSellersProducts', async (req,res)=>{
+    try {
+        const deletedProducts = await deleteSellersProducts(req.body.seller_id);
+    } catch (error) {
+        
+    }
+})
+
 app.get('/api/getProducts', async (req,res)=>{
     try {
         const products = await getProducts();

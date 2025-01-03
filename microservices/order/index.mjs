@@ -102,3 +102,13 @@ app.get('/api/getOrdersBySeller/:seller_id', async (req, res) => {
         
     }
 })
+
+app.put('/api/updateUserOrders', async (req, res) => {
+    try {
+        const {user_id, order}  = req.body;
+        const updatedOrder = await updateUserOrders(user_id, order);
+    } catch (error) {
+        throw error
+        
+    }
+})
