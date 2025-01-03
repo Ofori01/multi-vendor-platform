@@ -49,7 +49,7 @@ async function getOrder(order_id){
 
 async function getSellerOrders(seller_id){
     try {
-        const orders = await OrdersModel.find({seller_id});
+        const orders = await OrdersModel.find({'items.seller_id': seller_id});
         return orders;
     } catch (error) {
         throw error
