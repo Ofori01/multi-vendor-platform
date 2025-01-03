@@ -21,7 +21,7 @@ authRouter.post('/signin', async (req,res)=> {
 authRouter.post('/signup', async (req,res)=> {
     const { password, email, name, role} = req.body;
     if( !password || !email || !name){
-        res.status(400).send('Missing fields');
+        return res.status(400).send('Missing fields');
     }
     try {
         const user = await communicator.signUp( password, email, name, role);
@@ -31,7 +31,7 @@ authRouter.post('/signup', async (req,res)=> {
         return res.status(200).send(user);
         
     } catch (error) {
-        res.status(500).send({msg: `Error: ${error.message}`});
+        return res.status(500).send({msg: `Error: ${error.message}`});
     }
 })
 export default authRouter
