@@ -118,12 +118,13 @@ app.get('/api/getUsers', async (req,res)=> {
     }
  })
 
- app.delete('/api/deleteUser', async (req,res)=>{
+ app.post('/api/deleteUser', async (req,res)=>{
     const {user_id, role} = req.body;
+    console.log(user_id)
     try {
         if(role === 'user'){
-            const deletedUser = await deleteUser(user_id);
             const message = await communicator.sendNotification(user_id, "Account Deleted",  `Hello, \n\nYour account was successfully deleted\n\nIf this wasn't you, please contact us immediately.\n\nBest regards,\nThe Multi-Vendor-Platform Team`);
+            const deletedUser = await deleteUser(user_id);
             await communicator.updateUserOrders(user_id, {order_status: "Cancelled"});
             res.status(200).send(deletedUser);
         }
@@ -131,6 +132,7 @@ app.get('/api/getUsers', async (req,res)=> {
             const deletedUser = await deleteUser(user_id);
             const message = await communicator.sendNotification(user_id, "Account Deleted",  `Hello, \n\nYour account was successfully deleted\n\nIf this wasn't you, please contact us immediately.\n\nBest regards,\nThe Multi-Vendor-Platform Team`);
             await communicator.deleteSellersProducts(user_id);
+            res.status(200).send(deletedUser)
 
         }
     } catch (error) {

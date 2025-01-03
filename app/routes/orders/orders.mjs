@@ -102,6 +102,10 @@ orderRouter.get('/order/get/sellers',authorization(['seller']) ,async (req, res)
             return res.status(400).send({msg: 'Missing required fields'});
         }
         const orders = await communicator.getOrdersBySeller(seller_id);
+        const user =  await communicator.getUser(orders.user_id);
+        if(user){
+            orders.user_name = user.name;
+        }
         res.status(200).send(orders);
     } catch (error) {
         res.status(500).send({msg: `${error.message}`});
@@ -109,7 +113,7 @@ orderRouter.get('/order/get/sellers',authorization(['seller']) ,async (req, res)
     }
 })
 
-orderRouter.get('/order/:id', async (req, res) => {
+orderRouter.get('/order/:id',authorization(['user','seller']) ,async (req, res) => {
     try {
         const {id} = req.params;
         if(!id) {

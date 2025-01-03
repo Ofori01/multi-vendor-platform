@@ -2,7 +2,7 @@ import jsonwebtoken  from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 function generateToken(userID, name, role ) {
     try {
-        let token = jsonwebtoken.sign({userID,name, role}, process.env.JWT_SECRET, {expiresIn: "1h"})
+        let token = jsonwebtoken.sign({userID,name, role}, process.env.JWT_SECRET, {expiresIn: "30d"})
         return token
     } catch (error) {
         throw error

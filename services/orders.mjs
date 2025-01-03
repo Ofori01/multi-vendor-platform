@@ -1,3 +1,4 @@
+import communicator from "../communicator/index.mjs";
 import OrdersModel from "../models/orders/ordersSchema.mjs";
 
 
@@ -10,6 +11,18 @@ async function placeOrder(order){
     throw error
     
  }
+}
+async function updateProductsStock(order){ 
+    try {
+         Promise.all(order.items.map(async (item) => {
+            const product = await communicator.getProduct(item.product_id);
+            const updatedProduct = await communicator.updateProduct(product.product_id, {stock_quantity: product.stock_quantity - item.quantity});
+            return updatedProduct;
+        }))
+    } catch (error) {
+        throw error
+        
+    }
 }
 
 async function updateOrder(order_id,order){
@@ -66,4 +79,4 @@ async function updateUserOrders(user_id,order){
     }
 }
 
-export {placeOrder, updateOrder, getOrders, getOrder, getSellerOrders, updateUserOrders};
+export {placeOrder, updateOrder, getOrders, getOrder, getSellerOrders, updateUserOrders,updateProductsStock};

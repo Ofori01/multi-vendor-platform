@@ -125,12 +125,12 @@ class Communicator {
       }
 
       async deleteUser(user_id, role) {
-        const response = await this.authServiceClient.delete('/deleteUser', {user_id, role}).catch(
+        const response = await this.authServiceClient.post('/deleteUser', {user_id, role}).catch(
           function (error) {
             if (error.response) {
               // The request was made and the server responded with a status code
               // that falls out of the range of 2xx
-              throw new Error(`error: ${error.response.data.msg}`);
+              throw new Error(`${error.response.data.msg}`);
              
             } 
           }
