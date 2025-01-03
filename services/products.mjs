@@ -97,7 +97,16 @@ async function getProductsBySeller(seller_id){
     }
 }
 
+async function deleteSellersProducts(seller_id){
+    try {
+        const deletedProducts = await ProductModel.deleteMany({seller_id})
+        return deletedProducts
+    } catch (error) {
+        throw error
+    }
+}
 
 
 
-export {addProduct,updateProduct,deleteProduct,getProducts,getProduct,getProductByCategory, getAvailableCategories, getAllCategories, getProductsBySeller,getTopProductsService};
+
+export {addProduct,updateProduct,deleteProduct,getProducts,getProduct,getProductByCategory, getAvailableCategories, getAllCategories, getProductsBySeller,getTopProductsService, deleteSellersProducts};

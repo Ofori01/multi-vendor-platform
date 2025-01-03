@@ -68,9 +68,10 @@ app.delete('/api/deleteProduct', async (req,res)=>{
     }
 })
 
-app.delete('/api/deleteSellersProducts', async (req,res)=>{
+app.delete('/api/deleteSellersProducts/:id', async (req,res)=>{
     try {
-        const deletedProducts = await deleteSellersProducts(req.body.seller_id);
+        const {id} = req.params
+        const deletedProducts = await deleteSellersProducts(id);
     } catch (error) {
         
     }

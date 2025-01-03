@@ -278,6 +278,18 @@ class Communicator {
       return response.data
     }
 
+    async deleteSellersProducts(user_id){
+      const response = await this.productServiceClient.delete(`/deleteSellersProduct/${user_id}`).catch(
+        function (error){
+          if(error.response){
+            throw new Error(`${error.response.data.msg}`);
+          }
+        }
+      )
+      return response.data
+      
+    }
+
 
 
 

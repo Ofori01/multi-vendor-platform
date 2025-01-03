@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import express from 'express';
 import mongoose from 'mongoose';
-import { getOrder, getOrders, getSellerOrders, placeOrder, updateOrder } from '../../services/orders.mjs';
+import { getOrder, getOrders, getSellerOrders, placeOrder, updateOrder, updateUserOrders } from '../../services/orders.mjs';
 
 dotenv.config();
 
@@ -49,15 +49,7 @@ app.put('/api/updateOrder', async (req, res) => {
 
 })
 
-app.put('/api/updateUserOrders', async (req, res) => {
-    try {
-        const {user_id, order}  = req.body;
-        const updatedOrder = await updateUserOrders(user_id,order);
-        res.status(200).send(updatedOrder);
-    } catch (error) {
-        res.status(500).send({msg: `${error.message}`});
-    }
-})
+
 
 app.patch('/api/cancelOrder', async (req, res) => {
     try {

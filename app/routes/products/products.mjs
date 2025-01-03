@@ -51,7 +51,6 @@ productRouter.delete('/product/delete/:id',authorization(['seller', 'admin']) ,a
 
 productRouter.get('/product/getAll',async (req,res)=>{
     const {category} = req.query;
-    console.log(category)
     if(category){
         try {
             const products = await communicator.getProductsByCategory(category);

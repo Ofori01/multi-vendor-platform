@@ -128,8 +128,9 @@ app.get('/api/getUsers', async (req,res)=> {
             res.status(200).send(deletedUser);
         }
         else if(role === 'seller'){
-            const deleteUser = await deleteUser(user_id);
+            const deletedUser = await deleteUser(user_id);
             const message = await communicator.sendNotification(user_id, "Account Deleted",  `Hello, \n\nYour account was successfully deleted\n\nIf this wasn't you, please contact us immediately.\n\nBest regards,\nThe Multi-Vendor-Platform Team`);
+            await communicator.deleteSellersProducts(user_id);
 
         }
     } catch (error) {
