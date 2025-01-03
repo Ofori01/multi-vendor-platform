@@ -28,7 +28,7 @@ authRouter.post('/signup', async (req,res)=> {
         if(!user) throw new Error("User not created");
         const message = await communicator.sendNotification(user.user_id, "Multi-Vendor-Platform Account Created Successfully",`Hello ${user.name},\n\nThank you for signing up on our platform. We are excited to have you on board and look forward to providing you with the best service possible.\n\nBest regards,\nThe Multi-Vendor-Platform Team`
         );
-        return res.status(200).send({msg: "User created"});
+        return res.status(200).send(user);
         
     } catch (error) {
         res.status(500).send({msg: `Error: ${error.message}`});

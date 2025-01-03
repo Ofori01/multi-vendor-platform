@@ -99,6 +99,7 @@ app.put('/api/updateUserOrders', async (req, res) => {
     try {
         const {user_id, order}  = req.body;
         const updatedOrder = await updateUserOrders(user_id, order);
+        return updateOrder;
     } catch (error) {
         throw error
         

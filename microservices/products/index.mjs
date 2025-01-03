@@ -57,8 +57,9 @@ app.put('/api/updateProduct', async (req,res)=>{
     }
 })
 
-app.delete('/api/deleteProduct', async (req,res)=>{
-    const {product_id} = req.body;
+app.delete('/api/deleteProduct/:id', async (req,res)=>{
+    const product_id = req.params.id;
+    console.log(product_id)
     try {
         const deletedProduct = await deleteProduct(product_id);
         res.status(200).send(deletedProduct);
@@ -128,6 +129,7 @@ app.get('/api/getProductImage/:id', async (request,response)=>{
 app.get('/api/getProductsByCategory/:category', async (req,res)=>{
     try {
         const {category} = req.params;
+        console.log(category)
         const products = await getProductByCategory(category);
         res.status(200).send(products);
     } catch (error) {

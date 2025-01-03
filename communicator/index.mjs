@@ -166,7 +166,7 @@ class Communicator {
         return response.data;
     }
     async  deleteProduct(product_id) {
-        const response = await this.productServiceClient.delete('/deleteProduct', {product_id}).catch(
+        const response = await this.productServiceClient.delete(`/deleteProduct/${product_id}`).catch(
           function (error) {
             if (error.response) {
               // The request was made and the server responded with a status code

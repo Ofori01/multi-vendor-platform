@@ -41,7 +41,8 @@ productRouter.delete('/product/delete/:id',authorization(['seller', 'admin']) ,a
         res.status(400).send({msg: "Please provide all the details"});
     }
     try {
-        const deletedProduct = await communicator.deleteProduct(id);
+        const deletedProduct = await communicator.deleteProduct(product_id);
+        console.log(deletedProduct)
         res.status(200).send(deletedProduct);
     } catch (error) {
         res.status(500).send({msg: `${error.message}`})

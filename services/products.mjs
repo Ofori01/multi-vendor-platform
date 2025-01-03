@@ -23,7 +23,8 @@ async function updateProduct(product_id,product){
                     throw error;
                 }
             }
-            product.image_url = await uploadToGridFS(product.image);
+            console.log(product.image_url)
+            product.image_url = await uploadToGridFS(product.image_url);
         }
         const updatedProduct = await ProductModel.findOneAndUpdate({product_id},product,{new:true});
         return updatedProduct
