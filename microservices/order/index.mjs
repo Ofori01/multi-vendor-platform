@@ -49,6 +49,16 @@ app.put('/api/updateOrder', async (req, res) => {
 
 })
 
+app.put('/api/updateUserOrders', async (req, res) => {
+    try {
+        const {user_id, order}  = req.body;
+        const updatedOrder = await updateUserOrders(user_id,order);
+        res.status(200).send(updatedOrder);
+    } catch (error) {
+        res.status(500).send({msg: `${error.message}`});
+    }
+})
+
 app.patch('/api/cancelOrder', async (req, res) => {
     try {
         const {order_id}  = req.body;
@@ -73,7 +83,7 @@ app.post('/api/getUserOrders', async (req, res) => {
 
 app.get('/api/getOrder/:id', async (req, res) => {
     try {
-        const {order_id}  = req.body;
+        const order_id  = req.params.id;
         const order = await getOrder(order_id);
         res.status(200).send(order);
     } catch (error) {

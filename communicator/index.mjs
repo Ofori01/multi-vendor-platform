@@ -108,7 +108,35 @@ class Communicator {
           
         );
         return response.data;
-    }
+
+      }
+      async updateUser(user_id, user) {
+        const response = await this.authServiceClient.put('/updateUser', {user_id, user}).catch(
+          function (error) {
+            if (error.response) {
+              // The request was made and the server responded with a status code
+              // that falls out of the range of 2xx
+              throw new Error(`error: ${error.response.data.msg}`);
+             
+            } 
+          }
+        );
+        return response.data;
+      }
+
+      async deleteUser(user_id) {
+        const response = await this.authServiceClient.delete('/deleteUser', {user_id}).catch(
+          function (error) {
+            if (error.response) {
+              // The request was made and the server responded with a status code
+              // that falls out of the range of 2xx
+              throw new Error(`error: ${error.response.data.msg}`);
+             
+            } 
+          }
+        );
+        return response.data;
+      }
 
     //product service communication
     async  addProduct(seller_id, title, description, price, stock_quantity, category,image) {

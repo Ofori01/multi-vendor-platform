@@ -105,7 +105,7 @@ orderRouter.get('/order/get/sellers',authorization(['seller']) ,async (req, res)
     }
 })
 
-orderRouter.get('/order/getOrder/:id', async (req, res) => {
+orderRouter.get('/order/:id', async (req, res) => {
     try {
         const {id} = req.params;
         if(!id) {

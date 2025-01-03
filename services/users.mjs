@@ -20,4 +20,27 @@ async function createUser(password, email, name, role) {
     }
 }
 
-export {findUserByEmail, createUser}
+async function updateUser(user_id, user) {
+    try {
+        console.log(user_id, user)
+        const updatedUser = await usersModel.findOneAndUpdate({user_id}, user, {new: true});
+        if(!updatedUser) throw new Error("User not found");
+        return updatedUser;
+    }
+    catch (error) {
+        throw error
+    }
+}
+
+
+async function deleteUser(user_id) {
+    try {        
+        const deletedUser = await usersModel.findOneAndDelete({user_id});
+        if(!deletedUser) throw new Error("User not found");
+        return deletedUser;
+    } catch (error) {
+        throw error
+    }
+}
+
+export {findUserByEmail, createUser,updateUser,deleteUser}

@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 import mongoose, { mongo } from 'mongoose';
 import { comparePasswords, generatePasswordHash, generateToken, refreshToken, verifyToken } from '../../utils/authentication.mjs';
-import { createUser, findUserByEmail } from '../../services/users.mjs';
+import { createUser, deleteUser, findUserByEmail, updateUser } from '../../services/users.mjs';
 import { getUser, getUsers } from '../../utils/users.mjs';
 
 dotenv.config();
@@ -100,5 +100,26 @@ app.get('/api/getUsers', async (req,res)=> {
     } catch (error) {
         res.status(500).send({msg: `${error.message}`})
         
+    }
+ })
+
+ app.put('/api/updateUser', async (req,res)=>{
+    const {user_id, user} = req.body;
+    try {
+        const updatedUser = await updateUser(user_id, user);
+        res.status(200).send(updatedUser);
+    } catch (error) {
+        res.status(500).send({msg: `${error.message}`})
+        
+    }
+ })
+
+ app.delete('/api/deleteUser', async (req,res)=>{
+    const {user_id} = req.body;
+    try {
+        const deletedUser = await deleteUser(user_id);
+        res.status(200).send(deletedUser);
+    } catch (error) {
+        res.status(500).send({msg: `${error.message}`})
     }
  })
