@@ -22,15 +22,7 @@ async function updateOrder(order_id,order){
     }
 }
 
-async function updateUserOrders(user_id,order){
-    try {
-        const updatedOrder = await OrdersModel.updateMany({user_id}, order, {new: true});
-        return updatedOrder;
-    } catch (error) {
-        throw error
-        
-    }
-}
+
 
 
 
