@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import express from 'express';
 import mongoose from 'mongoose';
-import { getOrder, getOrders, placeOrder, updateOrder } from '../../services/orders.mjs';
+import { getOrder, getOrders, getSellerOrders, placeOrder, updateOrder } from '../../services/orders.mjs';
 
 dotenv.config();
 
@@ -29,6 +29,7 @@ app.post('/api/placeOrder', async (req, res) => {
     try {
         const {order}  = req.body;
         const newOrder = await placeOrder(order);
+
         res.status(201).send(newOrder);
     } catch (error) {
         res.status(500).send({msg: `${error.message}`});
@@ -79,4 +80,15 @@ app.get('/api/getOrder/:id', async (req, res) => {
         res.status(500).send({msg: `${error.message}`});
     }
 
+})
+
+app.get('/api/getOrdersBySeller/:seller_id', async (req, res) => {
+    try {
+        const {seller_id}  = req.params;
+        const orders = await getSellerOrders(seller_id);
+        return res.status(200).send(orders);
+    } catch (error) {
+        res.status(500).send({msg: `${error.message}`});
+        
+    }
 })

@@ -6,17 +6,27 @@ import addProductController from "./controller/addProduct.mjs";
 const productRouter = Router();
 
 const storage = multer.memoryStorage();
-const upload = multer({ storage, limits: {fileSize: 5 *1024 *1024} });
+const upload = multer({ storage, limits: {fileSize: 10 *1024 *1024} });
 
 
 productRouter.post('/product/add',authorization(['seller']) ,upload.single("image") ,addProductController)
 
-productRouter.put('/product/update',authorization(['seller']) ,async (req,res)=>{
-    const {product_id, product} = req.body;
+productRouter.put('/product/update/:id',authorization(['seller']),upload.single("image"),async (req,res)=>{
+    const product_id = req.params.id;
+    const updateData = req.body;
+    let product = {};
+    Object.keys(updateData).forEach(key => {
+        product[key] = updateData[key];
+    });
     if(!product_id || !product){
         return res.status(400).send({msg: "Please provide all the details"});
     }
+    const image = req.file
+    if (image) {
+        product.image_url = image;
+    }
     try {
+        
         const updatedProduct = await communicator.updateProduct(product_id, product);
         res.status(200).send(updatedProduct);
     } catch (error) {
@@ -25,13 +35,13 @@ productRouter.put('/product/update',authorization(['seller']) ,async (req,res)=>
     }
 })
 
-productRouter.delete('/product/delete',authorization(['seller', 'admin']) ,async (req,res)=>{
-    const {product_id} = req.body;
+productRouter.delete('/product/delete/:id',authorization(['seller', 'admin']) ,async (req,res)=>{
+    const {id} = req.params;
     if(!product_id){
         res.status(400).send({msg: "Please provide all the details"});
     }
     try {
-        const deletedProduct = await communicator.deleteProduct(product_id);
+        const deletedProduct = await communicator.deleteProduct(id);
         res.status(200).send(deletedProduct);
     } catch (error) {
         res.status(500).send({msg: `${error.message}`})
@@ -115,6 +125,16 @@ productRouter.get('/product/allCategories', async (req,res)=>{
     try {
         const categories = await communicator.getAllCategories();
         res.status(200).send(categories);
+    } catch (error) {
+        res.status(500).send({msg: `${error.message}`})
+        
+    }
+})
+
+productRouter.get('/product/top', async (req,res)=>{
+    try {
+        const products = await communicator.getTopProducts();
+        res.status(200).send(products);
     } catch (error) {
         res.status(500).send({msg: `${error.message}`})
         

@@ -1,4 +1,6 @@
 import ProductModel from "../models/products/productsSchema.mjs";
+import deleteFromGridFS from "../utils/deleteFromBucket.mjs";
+import uploadToGridFS from "../utils/imageUploader.mjs";
 
 async function addProduct(seller_id, title, description, price, stock_quantity, category,imageId){
     try {
@@ -12,6 +14,17 @@ async function addProduct(seller_id, title, description, price, stock_quantity, 
 
 async function updateProduct(product_id,product){
     try {
+        if(product.image_url){
+            const {image_url} = await ProductModel.findOne({product_id});
+            if(image_url){
+                try {
+                await deleteFromGridFS(image_url);
+                } catch (error) {
+                    throw error;
+                }
+            }
+            product.image_url = await uploadToGridFS(product.image);
+        }
         const updatedProduct = await ProductModel.findOneAndUpdate({product_id},product,{new:true});
         return updatedProduct
     } catch (error) {
@@ -40,6 +53,14 @@ async function getProduct(product_id){
        return await ProductModel.findOne({product_id});
     }
     catch (error) {
+        throw error;
+    }
+}
+
+async function getTopProductsService(){
+    try {
+        return await ProductModel.find().sort({rating:-1}).limit(4);
+    } catch (error) {
         throw error;
     }
 }
@@ -76,4 +97,7 @@ async function getProductsBySeller(seller_id){
     }
 }
 
-export {addProduct,updateProduct,deleteProduct,getProducts,getProduct,getProductByCategory, getAvailableCategories, getAllCategories, getProductsBySeller};
+
+
+
+export {addProduct,updateProduct,deleteProduct,getProducts,getProduct,getProductByCategory, getAvailableCategories, getAllCategories, getProductsBySeller,getTopProductsService};

@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { mongo } from 'mongoose';
 
 const orderSchema = new mongoose.Schema({
     order_id: {
@@ -41,6 +41,22 @@ const orderSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.String,
         enum: ["Pending", "Paid", "Failed", "Refunded"],
         default: "Pending"
+    },
+    payment_method: {
+        type: mongoose.Schema.Types.String,
+        // enum: ["Visa Card", "PayPal", "Cash"],
+        required: true
+    },
+    shipping_price: {
+        type: mongoose.Schema.Types.Number,
+        required: true,
+        min: 0
+
+    },
+    items_price: {
+        type: mongoose.Schema.Types.Number,
+        required: true,
+        min: 0
     },
     shipping_address: {
         address: {

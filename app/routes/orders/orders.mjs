@@ -7,11 +7,11 @@ const orderRouter = Router();
 
 orderRouter.post('/order/create',authorization(['user']), async (req, res) => {
     try {
-        const {items,total_price,shipping_address} = req.body;
+        const {items,total_price,shipping_address,items_price, shipping_price,payment_method} = req.body;
         if(!items || !total_price || !shipping_address) {
             return res.status(400).send({msg: 'Missing required fields'});
         }
-        const createdOrder  = await communicator.placeOrder({items,total_price,user_id: req.user.userID,shipping_address});
+        const createdOrder  = await communicator.placeOrder({items,total_price,user_id: req.user.userID,shipping_address, items_price, shipping_price, payment_method});
         if(createdOrder){
             //get product names
             let sellers= []
@@ -30,7 +30,7 @@ orderRouter.post('/order/create',authorization(['user']), async (req, res) => {
 
             //send notification to seller(s)
             await Promise.all(
-                sellers.forEach(async ({seller_id,product_title,quantity, price})=> await communicator.sendNotification(seller_id,"Order Placed", `Hello,\n\nAn order for your product ${product_title} with price ${price} has been placed.\nThe order was placed for ${quantity} units of ${product_title}\n\nYou will be notified when the payment for the order is confirmed.\n\n Thank you,\nMulti-vendor-platform-team  `))
+                sellers.map(async ({seller_id,product_title,quantity, price})=> await communicator.sendNotification(seller_id,"Order Placed", `Hello,\n\nAn order for your product ${product_title} with price ${price} has been placed.\nThe order was placed for ${quantity} units of ${product_title}\n\nYou will be notified when the payment for the order is confirmed.\n\n Thank you,\nMulti-vendor-platform-team  `))
             ) 
 
         }
@@ -89,6 +89,20 @@ orderRouter.get('/order/getOrders',authorization(['user']) ,async (req, res) => 
         
     }
 
+})
+
+orderRouter.get('/order/get/sellers',authorization(['seller']) ,async (req, res) => {
+    try {
+        const seller_id = req.user.userID;
+        if(!seller_id) {
+            return res.status(400).send({msg: 'Missing required fields'});
+        }
+        const orders = await communicator.getOrdersBySeller(seller_id);
+        res.status(200).send(orders);
+    } catch (error) {
+        res.status(500).send({msg: `${error.message}`});
+        
+    }
 })
 
 orderRouter.get('/order/getOrder/:id', async (req, res) => {

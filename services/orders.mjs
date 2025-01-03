@@ -44,5 +44,15 @@ async function getOrder(order_id){
     }
 }
 
+async function getSellerOrders(seller_id){
+    try {
+        const orders = await OrdersModel.find({seller_id});
+        return orders;
+    } catch (error) {
+        throw error
+        
+    }
+}
 
-export {placeOrder, updateOrder, getOrders, getOrder};
+
+export {placeOrder, updateOrder, getOrders, getOrder, getSellerOrders};

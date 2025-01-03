@@ -8,7 +8,6 @@ async function addProductController(req,res,next){
             return res.status(400).send({msg: "Please provide all the details"});
         }
         const image = req.file;
-        console.log(image);
         if(!image) return res.status(400).send({msg: "Please provide an image"});
         const newProduct = await communicator.addProduct(seller_id, title, description, price, stock_quantity, category,image);
         const date = new Date(newProduct.createdAt);
