@@ -116,6 +116,11 @@ orderRouter.get('/order/:id', async (req, res) => {
             return res.status(400).send({msg: 'Order ID is required'});
         }
         const order = await communicator.getOrder(id);
+        const user = await communicator.getUser(order.user_id);
+        if(user){
+            order.user_name = user.name;
+            order.user_email = user.email;
+        }
         res.status(200).send(order);
     } catch (error) {
         res.status(500).send({msg: `${error.message}`});
