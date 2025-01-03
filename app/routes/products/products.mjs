@@ -36,7 +36,7 @@ productRouter.put('/product/update/:id',authorization(['seller']),upload.single(
 })
 
 productRouter.delete('/product/delete/:id',authorization(['seller', 'admin']) ,async (req,res)=>{
-    const {id} = req.params;
+    const product_id = req.params.id;
     if(!product_id){
         res.status(400).send({msg: "Please provide all the details"});
     }

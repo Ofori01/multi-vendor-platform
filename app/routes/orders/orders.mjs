@@ -5,7 +5,7 @@ import authorization from "../auth/controllers/authController.mjs";
 
 const orderRouter = Router();
 
-orderRouter.post('/order/create',authorization(['user']), async (req, res) => {
+orderRouter.post('/order/create',authorization(['user','seller']), async (req, res) => {
     try {
         const {items,total_price,shipping_address,items_price, shipping_price,payment_method} = req.body;
         if(!items || !total_price || !shipping_address) {
@@ -76,7 +76,7 @@ orderRouter.patch('/order/cancel' ,async (req, res) => {
 
 })
 
-orderRouter.get('/order/getOrders',authorization(['user']) ,async (req, res) => {
+orderRouter.get('/order/getOrders',authorization(['user','seller']) ,async (req, res) => {
     try {
         const user_id = req.user.userID;
         if(!user_id) {

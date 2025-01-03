@@ -106,6 +106,9 @@ app.get('/api/getUsers', async (req,res)=> {
  app.put('/api/updateUser', async (req,res)=>{
     const {user_id, user} = req.body;
     try {
+        if (user.password) {
+            user.password = generatePasswordHash(user.password);
+        }
         const updatedUser = await updateUser(user_id, user);
         res.status(200).send(updatedUser);
     } catch (error) {

@@ -59,7 +59,7 @@ async function getProduct(product_id){
 
 async function getTopProductsService(){
     try {
-        return await ProductModel.find().sort({rating:-1}).limit(4);
+        return await ProductModel.find().sort({ratings:-1}).limit(4);
     } catch (error) {
         throw error;
     }

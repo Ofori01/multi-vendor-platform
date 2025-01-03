@@ -37,6 +37,7 @@ async function updateUserOrders(user_id,order){
 async function getOrders(user_id){
     try {
         const orders = await OrdersModel.find({user_id});
+        console.log(orders)
         return orders;
     } catch (error) {
         throw error
